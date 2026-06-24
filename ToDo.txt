@@ -129,3 +129,9 @@ upgrade: 8 tier 0 --> 2 tier 1
 
 
 create alias in databases.conf (Firebird) under Live-Databases
+
+use dataclass: from dataclasses import dataclass
+
+no interfaces, no getters/setters, this is not java.
+
+__init__.py indicate the folder as a package
