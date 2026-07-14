@@ -1,63 +1,79 @@
-class MaterialRepository:
+from models import Material
 
-    def __init__(self, connection):
-        self.connection = connection
+class SubtypeRepository:
 
-    def get_by_id(self, material_id):
-        sql = "SELECT * FROM material where id = ?"
+    def __init__(self, session):
+        self.session = session
+        
+    def _cursor(self):
+        return self.session.connection.cursor()
+    
+    def _map(self, row):
+        subtype_id = (Essence, row[0])
 
-        cursor = self.connection.cursor()
-        cursor.execute(sql, (material_id,))
+        if subtype_id in self.session.identity_map:
+            return self.session.identity_map[subtype_id]
+
+        subtype = Subtype(
+            id=row[0],
+            name=row[1])
+
+        self.session.identity_map[subtype_id] = subtype
+
+        return subtype
+
+        
+    def get_by_id(self, essence_id):
+        sql = "SELECT * FROM subtype where id = ?"
+        
+        cursor = self._cursor()
+        cursor.execute(sql, (essence_id,))
         row = cursor.fetchone()
 
-    return Material(*row) if row else None
+        return self._map(row) if row else None
 
 
     def get_by_name(self, name):
-        sql = "SELECT * FROM material WHERE name = ?"
+        sql = "SELECT * FROM subtype WHERE name = ?"
 
-        cursor = self.connection.cursor()
+        cursor = self._cursor()
         cursor.execute(sql, (name,))
         row = cursor.fetchone()
 
-        return Material(*row) if row else None
+        return self._map(row) if row else None
     
 
     def get_all(self):
-        cur = self.connection.cursor()
-        cur.execute("SELECT * FROM material")
+        cursor = self._cursor()
+        cursor.execute("SELECT * FROM subtype")
 
-        return [Material(*row) for row in cur.fetchall()]
+        return [self._map(row) for row in cursor.fetchall()]
     
 
-    def insert(self, material):
+    def insert(self, essence):
         sql = """
-            INSERT INTO material
+            INSERT INTO subtype
             (
-                name,
-                essence1, amount1,
-                essence2, amount2,
-                subtype,
-                composite,
-                tier
+                name
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?)
             RETURNING id
         """
 
-        cur = self.connection.cursor()
-        cur.execute(sql, (
-            material.name,
-            material.essence1,
-            material.amount1,
-            material.essence2,
-            material.amount2,
-            material.subtype,
-            material.composite,
-            material.tier,
-        ))
+        cursor = self._cursor()
+        cursor.execute(sql, (essence.name))
 
-        new_id = cur.fetchone()[0]
-        self.connection.commit()
+        new_id = cursor.fetchone()[0]
+        self.session.connection.commit()
 
         return new_id
+    
+    def delete_by_id(self, subtype_id):
+        sql = "DELETE FROM subtype WHERE id = ?"
+
+        cursor = self._cursor()
+        cursor.execute(sql, (subtype_id,))
+        self.session.connection.commit()
+
+        my_subtype = (Subtype, subtype_id)
+        self.session.identity_map.pop(my_subtype, None)

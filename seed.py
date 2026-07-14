@@ -92,7 +92,37 @@ materials = [
     (53, "Pristine Matter", 6, 2.0, 1, 1.6, 2, True, 4),
 ]
 
-sql_essence = "INSERT INTO essence VALUES (?,?)"
+recipes = [
+    (0,"Sword",10,5,14,5,12,6,11,3,7,6,10,3,9,3,8,4),
+    (1,"Greatsword",20,1,18,6,25,5,23,3,16,2,14,4,12,3,18,5),
+    (2,"Hatchet",14,6,12,5,11,3,10,6,10,5,9,4,8,6,7,5),
+    (3,"Battle Axe",23,3,20,5,18,6,25,6,14,4,12,5,18,5,16,6),
+    (4,"Club",10,2,14,6,12,5,11,1,8,1,7,4,10,5,9,6),
+    (5,"Mallet",23,5,20,1,18,2,25,6,12,1,18,5,16,6,14,3),
+    (6,"Bow",10,5,14,1,12,3,11,2,10,4,9,5,8,3,7,1),
+    (7,"Wand",10,3,14,3,12,1,11,2,10,5,9,1,8,6,7,5),
+    (8,"Javelin",25,6,23,5,20,3,18,6,14,6,12,3,18,3,16,5),
+    (9,"Shield",18,3,16,5,14,1,20,1,14,1,13,3,11,4,10,2),
+    (10,"Jewellery",12,5,18,2,16,3,14,4,11,4,10,2,8,1,12,6),
+    (11,"Leather Robes",13,4,12,2,16,4,15,2,8,1,7,3,10,4,9,2),
+    (12,"Medium Armor",27,1,24,5,22,3,30,4,12,6,16,4,15,1,13,5),
+    (13,"Heavy Armor",30,3,42,5,38,6,34,1,23,1,20,4,18,2,25,1),
+    (14,"Spear",10,2,14,6,12,3,11,6,5,1,7,4,10,5,9,2),
+    (15,"Polearm",23,6,20,1,18,5,25,5,18,1,16,2,14,4,12,1),
+    (16,"Scroll",12,1,11,2,10,4,14,4,9,3,8,2,7,4,10,4),
+    (17,"Codex",18,4,25,4,23,2,20,1,16,2,14,3,12,4,18,4),
+    (18,"Artefact",10,1,14,4,12,2,11,3,7,4,10,4,9,5,8,6),
+    (19,"Relic",23,2,20,5,18,6,25,6,18,4,16,3,14,2,12,4),
+    
+]
+
+inventory = [(0,"test",39,12),
+             (1,"test",19,15),
+             (2,"test",20,2),
+             (3,"hacker",13,25),
+]
+
+sql_essence = "INSERT INTO essence VALUES (?, ?)"
 
 for row in essences:
     my_cursor.execute(sql_essence, row)
@@ -100,26 +130,74 @@ for row in essences:
 print("All essences inserted.")
     
 
-sql_subtype = "INSERT INTO subtype VALUES (?,?)"
+sql_subtype = "INSERT INTO subtype VALUES (?, ?)"
 
 for row in subtypes:
     my_cursor.execute(sql_subtype, row)
 
-print("All sybtypes inserted.")
+print("All subtypes inserted.")
     
 
-sql = """
+sql_materials = """
 INSERT INTO material
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 """
 
 for row in materials:
-    my_cursor.execute(sql, row)
+    my_cursor.execute(sql_materials, row)
     
 print("All materials inserted.")
+
+
+sql_recipes = """
+INSERT INTO recipe
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+"""
+
+for row in recipes:
+    my_cursor.execute(sql_recipes, row)
+    
+print("All recipes inserted.")
+
+
+sql_inventory = """
+INSERT INTO inventory
+VALUES (?, ?, ?, ?)
+"""
+
+for row in inventory:
+    my_cursor.execute(sql_inventory, row)
+    
+print("Inventory inserted.")
+
+
+print("Seed complete: all data inserted.")
+
+
+# Restart identity columns
+my_cursor.execute("""
+    ALTER TABLE essence
+    ALTER COLUMN id RESTART WITH 7
+""")
+
+my_cursor.execute("""
+    ALTER TABLE subtype
+    ALTER COLUMN id RESTART WITH 3
+""")
+
+my_cursor.execute("""
+    ALTER TABLE material
+    ALTER COLUMN id RESTART WITH 54
+""")
+
+my_cursor.execute("""
+    ALTER TABLE recipe
+    ALTER COLUMN id RESTART WITH 20
+""")
+
+print("Id's restarted.")
+
 
 my_connection.commit()
 my_cursor.close()
 my_connection.close()
-
-print("Seed complete: all data inserted.")
