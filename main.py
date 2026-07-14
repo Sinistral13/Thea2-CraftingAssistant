@@ -11,9 +11,9 @@ def root():
 def get_recipe(recipe_name):
     session = Session(DatabaseConnection())
 
-    repo = RecipeRepository(session)
+    recipe_repository = RecipeRepository(session)
 
-    recipe = repo.get_by_name(recipe_name)
+    recipe = recipe_repository.get_by_name(recipe_name)
 
     if recipe is None:
         raise HTTPException(
