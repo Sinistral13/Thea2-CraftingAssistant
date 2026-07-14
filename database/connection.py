@@ -9,25 +9,23 @@ class DatabaseConnection:
         load_dotenv()
 
         db_password = os.getenv("DB_PASSWORD")
+        firebird_host = os.getenv("FIREBIRD_HOST")
 
         if not db_password:
-            raise ValueError(
-                "DB_PASSWORD not found"
-            )
+            raise ValueError("DB_PASSWORD not found")
 
-        db_path = os.path.join(
-            os.path.dirname(os.path.dirname(__file__)),
-            "THEA_MAT.FDB"
-        )
-
-        print("Connecting to:", db_path)
+        if not firebird_host:
+            raise ValueError("FIREBIRD_HOST not found")
 
         self.connection = fdb.connect(
-            database=db_path,
+            host=firebird_host,
+            database="/firebird/data/THEA_MAT.FDB",
             user="SYSDBA",
             password=db_password
         )
-            
-        
+
+        print("Connected to Firebird:", firebird_host)
+
+
     def close(self):
         self.connection.close()
