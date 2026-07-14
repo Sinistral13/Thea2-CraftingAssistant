@@ -8,13 +8,7 @@ class DatabaseConnection:
     def __init__(self):
         load_dotenv()
 
-        self.connection = psycopg2.connect(
-            host=os.getenv("PG_HOST"),
-            database=os.getenv("PG_DATABASE"),
-            user=os.getenv("PG_USER"),
-            password=os.getenv("PG_PASSWORD"),
-            port=os.getenv("PG_PORT")
-        )
+        self.connection = psycopg2.connect(os.getenv("DATABASE_URL"))
 
     def close(self):
         self.connection.close()
