@@ -12,20 +12,21 @@ class DatabaseConnection:
 
         if not db_password:
             raise ValueError(
-                "DB_PASSWORD not found. Please add your DB_PASSWORD to the .env file."
+                "DB_PASSWORD not found"
             )
 
         db_path = os.path.join(
-            os.path.dirname(__file__),
-            "THEA_MAT.fdb"
+            os.path.dirname(os.path.dirname(__file__)),
+            "THEA_MAT.FDB"
         )
+
+        print("Connecting to:", db_path)
 
         self.connection = fdb.connect(
             database=db_path,
             user="SYSDBA",
             password=db_password
         )
-
             
         
     def close(self):

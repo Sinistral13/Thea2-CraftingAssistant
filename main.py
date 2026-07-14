@@ -23,3 +23,5 @@ def get_recipe(recipe_name):
         )
 
     return recipe
+    
+#get_recipe("Sword")   
