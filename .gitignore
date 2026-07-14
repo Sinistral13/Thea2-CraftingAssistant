@@ -3,4 +3,7 @@ __pycache__/
 .pydevproject
 .env
 ToDo
-test/
+test_main.py
+test_recipe.py
+test_material.py
+ToDo.txt
