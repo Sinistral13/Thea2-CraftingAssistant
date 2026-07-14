@@ -31,7 +31,7 @@ class MaterialRepository:
 
         
     def get_by_id(self, material_id):
-        sql = "SELECT * FROM material where id = ?"
+        sql = "SELECT * FROM material where id = %s"
         
         cursor = self._cursor()
         cursor.execute(sql, (material_id,))
@@ -41,7 +41,7 @@ class MaterialRepository:
 
 
     def get_by_name(self, name):
-        sql = "SELECT * FROM material WHERE name = ?"
+        sql = "SELECT * FROM material WHERE name = %s"
 
         cursor = self._cursor()
         cursor.execute(sql, (name,))
@@ -68,7 +68,7 @@ class MaterialRepository:
                 composite,
                 tier
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING id
         """
 
@@ -91,7 +91,7 @@ class MaterialRepository:
     
     
     def delete_by_id(self, material_id):
-        sql = "DELETE FROM material WHERE id = ?"
+        sql = "DELETE FROM material WHERE id = %s"
 
         cursor = self._cursor()
         cursor.execute(sql, (material_id,))

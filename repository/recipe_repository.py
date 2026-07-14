@@ -40,7 +40,7 @@ class RecipeRepository:
 
         
     def get_by_id(self, recipe_id):
-        sql = "SELECT * FROM recipe where id = ?"
+        sql = "SELECT * FROM recipe where id = %s"
         
         cursor = self._cursor()
         cursor.execute(sql, (recipe_id,))
@@ -50,7 +50,7 @@ class RecipeRepository:
 
 
     def get_by_name(self, name):
-        sql = "SELECT * FROM recipe WHERE name = ?"
+        sql = "SELECT * FROM recipe WHERE name = %s"
 
         cursor = self._cursor()
         cursor.execute(sql, (name,))
@@ -80,7 +80,7 @@ class RecipeRepository:
                 secondary_amount3, secondary_essence3,
                 secondary_amount4, secondary_essence4
             )
-            VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING id
         """
 
@@ -111,7 +111,7 @@ class RecipeRepository:
         return new_id
     
     def delete_by_id(self, recipe_id):
-        sql = "DELETE FROM recipe WHERE id = ?"
+        sql = "DELETE FROM recipe WHERE id = %s"
 
         cursor = self._cursor()
         cursor.execute(sql, (recipe_id,))

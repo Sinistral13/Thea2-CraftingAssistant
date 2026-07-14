@@ -24,7 +24,7 @@ class SubtypeRepository:
 
         
     def get_by_id(self, essence_id):
-        sql = "SELECT * FROM subtype where id = ?"
+        sql = "SELECT * FROM subtype where id = %s"
         
         cursor = self._cursor()
         cursor.execute(sql, (essence_id,))
@@ -34,7 +34,7 @@ class SubtypeRepository:
 
 
     def get_by_name(self, name):
-        sql = "SELECT * FROM subtype WHERE name = ?"
+        sql = "SELECT * FROM subtype WHERE name = %s"
 
         cursor = self._cursor()
         cursor.execute(sql, (name,))
@@ -56,7 +56,7 @@ class SubtypeRepository:
             (
                 name
             )
-            VALUES (?)
+            VALUES (%s)
             RETURNING id
         """
 
@@ -69,7 +69,7 @@ class SubtypeRepository:
         return new_id
     
     def delete_by_id(self, subtype_id):
-        sql = "DELETE FROM subtype WHERE id = ?"
+        sql = "DELETE FROM subtype WHERE id = %s"
 
         cursor = self._cursor()
         cursor.execute(sql, (subtype_id,))

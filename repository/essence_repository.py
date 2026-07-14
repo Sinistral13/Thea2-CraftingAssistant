@@ -24,7 +24,7 @@ class EssenceRepository:
 
         
     def get_by_id(self, essence_id):
-        sql = "SELECT * FROM essence where id = ?"
+        sql = "SELECT * FROM essence where id = %s"
         
         cursor = self._cursor()
         cursor.execute(sql, (essence_id,))
@@ -34,7 +34,7 @@ class EssenceRepository:
 
 
     def get_by_name(self, name):
-        sql = "SELECT * FROM essence WHERE name = ?"
+        sql = "SELECT * FROM essence WHERE name = %s"
 
         cursor = self._cursor()
         cursor.execute(sql, (name,))
@@ -56,7 +56,7 @@ class EssenceRepository:
             (
                 name
             )
-            VALUES (?)
+            VALUES (%s)
             RETURNING id
         """
 
@@ -70,7 +70,7 @@ class EssenceRepository:
     
     
     def delete_by_id(self, essence_id):
-        sql = "DELETE FROM essence WHERE id = ?"
+        sql = "DELETE FROM essence WHERE id = %s"
 
         cursor = self._cursor()
         cursor.execute(sql, (essence_id,))

@@ -1,21 +1,17 @@
-import fdb
+import psycopg2
 import os
 from dotenv import load_dotenv
 
 
 load_dotenv()
-DB_PASSWORD = os.getenv('DB_PASSWORD')
 
-if not DB_PASSWORD:
-    raise ValueError(
-    "DB_PASSWORD not found. Please add your DB_PASSWORD to the .env file."
-    )
-
-my_connection = fdb.connect(
-    dsn="THEA_MAT",
-    user="SYSDBA",
-    password=DB_PASSWORD
-)
+my_connection = psycopg2.connect(
+            host=os.getenv("PG_HOST"),
+            database=os.getenv("PG_DATABASE"),
+            user=os.getenv("PG_USER"),
+            password=os.getenv("PG_PASSWORD"),
+            port=os.getenv("PG_PORT")
+        )
 
 my_cursor = my_connection.cursor()
 
@@ -122,7 +118,7 @@ inventory = [(0,"test",39,12),
              (3,"hacker",13,25),
 ]
 
-sql_essence = "INSERT INTO essence VALUES (?, ?)"
+sql_essence = "INSERT INTO essence VALUES (%s, %s)"
 
 for row in essences:
     my_cursor.execute(sql_essence, row)
@@ -130,7 +126,7 @@ for row in essences:
 print("All essences inserted.")
     
 
-sql_subtype = "INSERT INTO subtype VALUES (?, ?)"
+sql_subtype = "INSERT INTO subtype VALUES (%s, %s)"
 
 for row in subtypes:
     my_cursor.execute(sql_subtype, row)
@@ -140,7 +136,7 @@ print("All subtypes inserted.")
 
 sql_materials = """
 INSERT INTO material
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
 """
 
 for row in materials:
@@ -151,7 +147,7 @@ print("All materials inserted.")
 
 sql_recipes = """
 INSERT INTO recipe
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
 """
 
 for row in recipes:
@@ -162,7 +158,7 @@ print("All recipes inserted.")
 
 sql_inventory = """
 INSERT INTO inventory
-VALUES (?, ?, ?, ?)
+VALUES (%s, %s, %s, %s)
 """
 
 for row in inventory:
