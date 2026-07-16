@@ -72,6 +72,13 @@ CREATE TABLE inventory (
     CONSTRAINT uq_inventory UNIQUE(player, material)
 );
 
+
+CREATE TABLE usertable (
+    username VARCHAR(20) NOT NULL,
+    password TEXT NOT NULL,
+    CONSTRAINT pk_usertable PRIMARY KEY (username)
+);
+
 unique needs 0, because NULL = NULL is not true
 
 Materials:
@@ -140,6 +147,8 @@ Recipe:
 
     
 "uvicorn main:app --reload" to start app.
+
+pip install python-jose[cryptography] passlib[bcrypt] python-multipart
 
 use dataclass: from dataclasses import dataclass
 

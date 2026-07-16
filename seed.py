@@ -5,13 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-my_connection = psycopg2.connect(
-            host=os.getenv("PG_HOST"),
-            database=os.getenv("PG_DATABASE"),
-            user=os.getenv("PG_USER"),
-            password=os.getenv("PG_PASSWORD"),
-            port=os.getenv("PG_PORT")
-        )
+my_connection = connection = psycopg2.connect(os.getenv("DATABASE_URL"))
 
 my_cursor = my_connection.cursor()
 
@@ -118,6 +112,12 @@ inventory = [(0,"test",39,12),
              (3,"hacker",13,25),
 ]
 
+
+users = [("test", "test"),
+         ("hacker","hacker"),
+         ("admin", "admin")
+    ]
+
 sql_essence = "INSERT INTO essence VALUES (%s, %s)"
 
 for row in essences:
@@ -167,6 +167,17 @@ for row in inventory:
 print("Inventory inserted.")
 
 
+sql_users = """
+INSERT INTO usertable
+VALUES (%s, %s)
+"""
+
+for row in users:
+    my_cursor.execute(sql_users, row)
+    
+print("All Users inserted.")
+
+
 print("Seed complete: all data inserted.")
 
 
@@ -189,6 +200,11 @@ my_cursor.execute("""
 my_cursor.execute("""
     ALTER TABLE recipe
     ALTER COLUMN id RESTART WITH 20
+""")
+
+my_cursor.execute("""
+    ALTER TABLE inventory
+    ALTER COLUMN id RESTART WITH 4
 """)
 
 print("Id's restarted.")

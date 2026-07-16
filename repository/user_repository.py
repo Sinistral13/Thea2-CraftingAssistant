@@ -1,6 +1,6 @@
 from models import Material
 
-class EssenceRepository:
+class UserRepository:
 
     def __init__(self, session):
         self.session = session
@@ -9,32 +9,22 @@ class EssenceRepository:
         return self.session.connection.cursor()
     
     def _map(self, row):
-        essence_id = (Essence, row[0])
+        user_name = (AppUser, row[0])
 
-        if essence_id in self.session.identity_map:
-            return self.session.identity_map[essence_id]
+        if user_name in self.session.identity_map:
+            return self.session.identity_map[user_name]
 
-        essence = Essence(
-            id=row[0],
-            name=row[1])
+        app_user = AppUser(
+            user_name=row[0],
+            password=row[1])
 
-        self.session.identity_map[essence_id] = essence
+        self.session.identity_map[user_name] = essence
 
         return essence
 
-        
-    def get_by_id(self, essence_id):
-        sql = "SELECT * FROM essence where id = %s"
-        
-        cursor = self._cursor()
-        cursor.execute(sql, (essence_id,))
-        row = cursor.fetchone()
-
-        return self._map(row) if row else None
-
 
     def get_by_name(self, name):
-        sql = "SELECT * FROM essence WHERE name = %s"
+        sql = "SELECT * FROM usertable WHERE name = %s"
 
         cursor = self._cursor()
         cursor.execute(sql, (name,))
@@ -45,14 +35,14 @@ class EssenceRepository:
 
     def get_all(self):
         cursor = self._cursor()
-        cursor.execute("SELECT * FROM essence")
+        cursor.execute("SELECT * FROM usertable")
 
         return [self._map(row) for row in cursor.fetchall()]
     
 
     def insert(self, essence):
         sql = """
-            INSERT INTO essence
+            INSERT INTO usertable
             (
                 name
             )
@@ -70,7 +60,7 @@ class EssenceRepository:
     
     
     def delete_by_id(self, essence_id):
-        sql = "DELETE FROM essence WHERE id = %s"
+        sql = "DELETE FROM usertable WHERE id = %s"
 
         cursor = self._cursor()
         cursor.execute(sql, (essence_id,))
