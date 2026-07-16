@@ -3,7 +3,7 @@ from repository import EssenceRepository
 from repository import SubtypeRepository
 from repository import RecipeRepository
 from repository import UserRepository
-
+from repository import InventoryRepository
 
 class Session:
 
@@ -17,3 +17,4 @@ class Session:
         self.subtypes = SubtypeRepository(self)
         self.recipes = RecipeRepository(self)
         self.users = UserRepository(self)
+        self.inventory = InventoryRepository(self)

@@ -106,10 +106,10 @@ recipes = [
     
 ]
 
-inventory = [(0,"test",39,12),
-             (1,"test",19,15),
-             (2,"test",20,2),
-             (3,"hacker",13,25),
+inventory = [(0,"Testuser",39,12),
+             (1,"Testuser",19,15),
+             (2,"Testuser",20,2),
+             (3,"Testuser2",13,25),
 ]
 
 

@@ -2,10 +2,37 @@ import bcrypt
 import os
 from datetime import datetime, timedelta
 from jose import jwt
+from dotenv import load_dotenv
+from fastapi import Depends, HTTPException
 
-SECRET_KEY = os.getenv("JWT_SECRET")
-ALGORITHM = "HS256"
 
+load_dotenv()
+
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM")
+
+
+def get_current_user(token):
+
+    try:
+        payload = decode_token(token)
+
+        username = payload.get("sub")
+
+        if username is None:
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid token"
+            )
+
+        return username
+
+    except Exception:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid token"
+        )
+        
 
 def hash_password(password):
     password_bytes = password.encode("utf-8")

@@ -6,3 +6,4 @@ from .material import Material
 from .subtype import Subtype
 from .recipe import Recipe
 from .user import AppUser
+from .inventory import Inventory
