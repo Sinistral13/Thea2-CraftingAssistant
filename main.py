@@ -1,7 +1,8 @@
 from database import DatabaseConnection, Session
 from fastapi import FastAPI, HTTPException
-from repository import RecipeRepository, EssenceRepository, MaterialRepository
+from repository import RecipeRepository, EssenceRepository, MaterialRepository, UserRepository
 from authentification import hash_password
+from models import AppUser
 
 app = FastAPI()
 
@@ -10,22 +11,24 @@ def root():
     return {"message": "Welcome! Please log in with /login/username,password"}
 
 @app.post("/register")
-def register(username: str, password: str):
+def register(username, password):
     session = Session(DatabaseConnection())
-    user_repository = UserRepository(session)
 
-    if user_repository.get_by_name(username):
+    if session.users.get_by_name(username):
         raise HTTPException(
             status_code=409,
             detail="Username already exists"
         )
+        
+    print(password)
+    print(len(password))
 
     user = AppUser(
         username=username,
         password=hash_password(password)
     )
 
-    user_repository.insert(user)
+    session.users.insert(user)
 
     return {"message": "User registered successfully"}
 

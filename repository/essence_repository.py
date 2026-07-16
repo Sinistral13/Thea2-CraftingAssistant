@@ -1,4 +1,4 @@
-from models import Material
+from models import Essence
 
 class EssenceRepository:
 
