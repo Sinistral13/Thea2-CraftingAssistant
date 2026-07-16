@@ -1,7 +1,7 @@
 from database import DatabaseConnection, Session
 from fastapi import FastAPI, HTTPException
 from repository import RecipeRepository, EssenceRepository, MaterialRepository
-from auth import hash_password
+from authentification import hash_password
 
 app = FastAPI()
 
