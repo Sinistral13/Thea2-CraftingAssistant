@@ -93,20 +93,27 @@ def get_inventory(token):
     return inventory
 
 
-@app.get("/craft")
-def get_inventory(player, token):
+@app.get("/craft/{recipe_name}")
+def get_crafting_materials(recipe_name, token):
     username = get_current_user(token)
     
     session = Session(DatabaseConnection())
-
-    inventory_repository = RecipeRepository(session)
-
-    inventory = inventory_repository.get_by_get_by_player(player)
-
-    if inventory is None:
-        raise HTTPException(
-            status_code=404,
-            detail="No inventory for this player."
-        )
-
-    return inventory
+    inventory_repository = InventoryRepository(session)
+    inventory = inventory_repository.get_by_player(username)
+    
+    recipe_repository = RecipeRepository(session)
+    recipe = recipe_repository.get_by_name(recipe_name)
+    
+    used_materials = craft.crafting(recipe, username)
+    if used_materials:
+        material_repository = MaterialRepository(session)
+    
+        primary_material = material_repository.get_by_id(used_materials[0][0]).name
+        secondary_material = material_repository.get_by_id(used_materials[1][0]).name
+    
+        return {
+        "Primary Material": primary_material,
+        "Secondary Material": secondary_material
+        }
+    else:
+        return "Not enough materials."
